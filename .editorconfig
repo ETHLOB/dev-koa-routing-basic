@@ -7,13 +7,13 @@ insert_final_newline = true
 charset = utf-8
 trim_trailing_whitespace = true
 indent_style = space
-indent_size = 2
+indent_size = 3
 
 [*.{js,ts,jsx,tsx,json}]
-indent_size = 2
+indent_size = 3
 
 [*.md]
-trim_trailing_whitespace = false
+trim_trailing_whitespace = true
 
 [Makefile]
 indent_style = tab

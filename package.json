@@ -1,30 +1,37 @@
 {
-  "name": "koa-tutorial",
-  "version": "1.0.0",
-  "description": "",
-  "type": "module",
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "scripts": {
-    "start": "node --watch index.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.11.0",
-  "dependencies": {
-    "koa": "^3.0.0",
-    "koa-router": "^13.0.1"
-  },
-  "devDependencies": {
-    "eslint": "^9.29.0",
-    "eslint-config-prettier": "^10.1.5",
-    "eslint-plugin-prettier": "^5.5.0",
-    "prettier": "^3.5.3",
-    "standard": "^17.1.2"
-  },
-  "eslintConfig": {
-    "extends": "standard"
-  }
+	"name": "koa-tutorial",
+	"version": "1.0.0",
+	"description": "",
+	"type": "module",
+	"engines": {
+		"node": ">=18.0.0"
+	},
+	"scripts": {
+		"start": "node --watch index.js",
+		"lint": "eslint .",
+		"lint:fix": "eslint --fix .",
+		"format": "prettier --write .",
+		"format:check": "prettier --check ."
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"packageManager": "pnpm@10.11.0",
+	"dependencies": {
+		"koa": "^3.0.0",
+		"koa-router": "^13.0.1"
+	},
+	"devDependencies": {
+		"@eslint/eslintrc": "^3.3.1",
+		"@eslint/js": "^9.29.0",
+		"eslint": "^9.29.0",
+		"eslint-config-prettier": "^10.1.5",
+		"eslint-plugin-prettier": "^5.5.0",
+		"globals": "^16.2.0",
+		"prettier": "^3.5.3",
+		"standard": "^17.1.2"
+	},
+	"eslintConfig": {
+		"extends": "standard"
+	}
 }

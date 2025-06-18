@@ -2,7 +2,7 @@ import Koa from 'koa';
 import { setFinalLoggerMdw, setResponseTimeMdw } from './middlewares.js';
 
 const app = new Koa();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3010;
 
 // logger (piso 1 - primer middleware)
 app.use(setFinalLoggerMdw);
@@ -16,4 +16,10 @@ app.use(async (ctx, next) => {
 	await next();
 });
 
-app.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));
+const server = app.listen(PORT, () => {
+	console.log(`Servidor activo en http://localhost:${PORT}`);
+});
+
+server.on('error', err => {
+	console.error('Error en el servidor:', err);
+});

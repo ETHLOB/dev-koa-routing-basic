@@ -4,10 +4,12 @@
 	"description": "",
 	"type": "module",
 	"engines": {
-		"node": ">=18.0.0"
+		"node": ">=20.6.0"
 	},
 	"scripts": {
-		"start": "node --watch index.js",
+		"start": "node --env-file=.env --watch index.js",
+		"start:prod": "node --env-file=.env.production index.js",
+		"dev": "node --env-file=.env.development --watch index.js",
 		"lint": "eslint .",
 		"lint:fix": "eslint --fix .",
 		"format": "prettier --write .",
@@ -19,7 +21,8 @@
 	"packageManager": "pnpm@10.11.0",
 	"dependencies": {
 		"koa": "^3.0.0",
-		"koa-router": "^13.0.1"
+		"koa-router": "^13.0.1",
+		"pg": "^8.16.1"
 	},
 	"devDependencies": {
 		"@eslint/eslintrc": "^3.3.1",

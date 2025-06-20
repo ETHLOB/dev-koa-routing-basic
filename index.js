@@ -7,8 +7,18 @@ const router = new Router();
 
 const PORT = process.env.PORT || 3010;
 
+// piso 1 - primer middleware. Considera que este middleware se ejecuta al final
+// de la cadena de middlewares
 app.use(setFinalLoggerMdw);
+
+// piso 2 - segundo middleware. Considera que este middleware se ejecuta antes del router
 app.use(setResponseTimeMdw);
+
+// piso 3 - router. Considera que este middleware se ejecuta antes de los endpoints
+app.use(async ctx => {
+	ctx.body = '¡Hola mundo desde Koa!';
+	ctx.status = 200;
+});
 
 app.use(router.routes()).use(router.allowedMethods());
 

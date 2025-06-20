@@ -1,5 +1,4 @@
 // logger (piso 1 - primer middleware)
-
 async function setFinalLoggerMdw(ctx, next) {
 	await next();
 	const responseTime = ctx.response.get('X-Response-Time');

@@ -1,4 +1,4 @@
-import { executeQuery } from './db.js';
+import { executeQuery } from './Database.js';
 
 async function getUsers() {
 	const query = 'SELECT * FROM users';
@@ -12,19 +12,18 @@ async function getUserById(id) {
 	return result[0];
 }
 
-async function createUser(name, lastname, email, identification, tokenId, password) {
+async function createUser(name, lastname, email, identification, password) {
 	const query = `
-    INSERT INTO 
+    INSERT INTO
     users (
-      name, 
-      lastname, 
-      email, 
-      identification, 
-      token-id, 
+      name,
+      lastname,
+      email,
+      identification,
       password
-    ) 
-    VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
-	const params = [name, lastname, email, identification, tokenId, password];
+    )
+    VALUES ($1, $2, $3, $4, $5) RETURNING *`;
+	const params = [name, lastname, email, identification, password];
 	const result = await executeQuery(query, params);
 	return result[0];
 }
@@ -33,7 +32,7 @@ async function updateUser(id, name, lastname, email, identification, tokenId, pa
 	const query = `
     UPDATE users
     SET name = $2, lastname = $3, email = $4, identification = $5, token_id = $6, password = $7
-    WHERE id = $1 
+    WHERE id = $1
     RETURNING *`;
 	const params = [id, name, lastname, email, identification, tokenId, password];
 	const result = await executeQuery(query, params);

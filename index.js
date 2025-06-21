@@ -3,7 +3,6 @@ import Router from 'koa-router';
 import { setFinalLoggerMdw, setResponseTimeMdw } from './middlewares/GenericMiddleware.js';
 import { bodyParserMdw } from './middlewares/BodyParserMdw.js';
 import { UserRepository } from './database/UserRepository.js';
-import { escapeLiteral } from 'pg';
 
 const app = new Koa();
 const router = new Router();
@@ -28,14 +27,13 @@ app.use(bodyParserMdw);
 
 app.use(router.routes()).use(router.allowedMethods());
 
-router.get('/user', async (ctx, next) => {
+router.get('/user', async ctx => {
 	const responseDB = await UserRepository.getUsers();
 	ctx.body = { ok: true, data: responseDB };
 	ctx.status = 200;
-	next();
 });
 
-router.post('/user', async (ctx, next) => {
+router.post('/user', async ctx => {
 	console.log('Datos del usuario:', ctx.request.body);
 	const { name, lastname, email, identification, password } = ctx.request.body;
 
@@ -48,31 +46,43 @@ router.post('/user', async (ctx, next) => {
 	);
 
 	ctx.body = { ok: true, message: savedUser };
-	next();
+	ctx.status = 201;
 });
 
-router.get('/vacilapi', (ctx, next) => {
+router.put('/user/:id', async ctx => {
+	const id = ctx.params.id;
+	const { name, lastname, email, identification, password } = ctx.request.body;
+
+	const updatedUser = await UserRepository.updateUser({
+		id,
+		name,
+		lastname,
+		email,
+		identification,
+		password,
+	});
+
+	ctx.body = { ok: true, message: updatedUser };
+});
+
+router.get('/vacilapi', ctx => {
 	ctx.body = '¡Hola mundo desde Koa-router GET!';
 	ctx.status = 200;
-	next();
 });
 
-router.post('/vacilapi', (ctx, next) => {
+router.post('/vacilapi', ctx => {
 	ctx.body = '¡Hola mundo desde Koa-router POST!';
 	ctx.status = 200;
-	next();
 });
 
-router.put('/vacilapi', (ctx, next) => {
+router.put('/vacilapi', ctx => {
 	ctx.body = '¡Hola mundo desde Koa-router PUT!';
 	ctx.status = 200;
-	next();
 });
 
-router.delete('/vacilapi', (ctx, next) => {
+router.delete('/vacilapi', ctx => {
 	ctx.body = '¡Hola mundo desde Koa-router DELETE!';
 	ctx.status = 200;
-	next();
 });
 
 const server = app.listen(PORT, () => {

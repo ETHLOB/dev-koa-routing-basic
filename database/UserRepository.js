@@ -28,13 +28,18 @@ async function createUser(name, lastname, email, identification, password) {
 	return result[0];
 }
 
-async function updateUser(id, name, lastname, email, identification, tokenId, password) {
+async function updateUser({ id, name, lastname, email, identification, password }) {
 	const query = `
     UPDATE users
-    SET name = $2, lastname = $3, email = $4, identification = $5, token_id = $6, password = $7
+    SET 
+			name = $2, 
+			lastname = $3, 
+			email = $4, 
+			identification = $5, 
+			password = $6
     WHERE id = $1
     RETURNING *`;
-	const params = [id, name, lastname, email, identification, tokenId, password];
+	const params = [id, name, lastname, email, identification, password];
 	const result = await executeQuery(query, params);
 	return result[0];
 }

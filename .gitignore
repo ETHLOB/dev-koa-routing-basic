@@ -2,6 +2,7 @@
 node_modules/
 .pnpm-store/
 localhost-koa-test/
+test/
 
 # Logs
 logs

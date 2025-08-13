@@ -33,6 +33,7 @@ router.get('/user', async ctx => {
 	ctx.status = 200;
 });
 
+// Endpoint para crear un usuario
 router.post('/user', async ctx => {
 	console.log('Datos del usuario:', ctx.request.body);
 	const { name, lastname, email, identification, password } = ctx.request.body;
@@ -49,6 +50,7 @@ router.post('/user', async ctx => {
 	ctx.status = 201;
 });
 
+// Endpoint para actualizar un usuario
 router.put('/user/:id', async ctx => {
 	const id = ctx.params.id;
 	const { name, lastname, email, identification, password } = ctx.request.body;
@@ -64,6 +66,20 @@ router.put('/user/:id', async ctx => {
 
 	ctx.body = { ok: true, message: updatedUser };
 });
+
+// Endpoint para eliminar un usuario
+router.delete('/user/:id', async (ctx, next) => {
+	const id = ctx.params.id;
+	const deletedUser = await UserRepository.deleteUser(id);
+	
+	if (!deletedUser) {
+		ctx.status = 404;
+		ctx.body = { ok: false, message: 'Usuario no encontrado' };
+		return;
+	}
+
+	ctx.body = { ok: true, message: 'Usuario eliminado', deletedUser };
+})
 
 router.get('/vacilapi', ctx => {
 	ctx.body = '¡Hola mundo desde Koa-router GET!';

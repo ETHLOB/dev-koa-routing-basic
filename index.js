@@ -1,11 +1,10 @@
 import Koa from 'koa';
-import Router from 'koa-router';
-import { setFinalLoggerMdw, setResponseTimeMdw } from './middlewares/GenericMiddleware.js';
+import { setFinalLoggerMdw, setResponseTimeMdw } from './middlewares/GenericMdw.js';
 import { bodyParserMdw } from './middlewares/BodyParserMdw.js';
-import { UserRepository } from './database/UserRepository.js';
+import router from './src/router/userRouter.js';
 
 const app = new Koa();
-const router = new Router();
+// const router = new Router();
 
 const PORT = process.env.PORT || 3010;
 
@@ -26,80 +25,6 @@ app.use(async (ctx, next) => {
 app.use(bodyParserMdw);
 
 app.use(router.routes()).use(router.allowedMethods());
-
-router.get('/user', async ctx => {
-	const responseDB = await UserRepository.getUsers();
-	ctx.body = { ok: true, data: responseDB };
-	ctx.status = 200;
-});
-
-// Endpoint para crear un usuario
-router.post('/user', async ctx => {
-	console.log('Datos del usuario:', ctx.request.body);
-	const { name, lastname, email, identification, password } = ctx.request.body;
-
-	const savedUser = await UserRepository.createUser(
-		name,
-		lastname,
-		email,
-		identification,
-		password
-	);
-
-	ctx.body = { ok: true, message: savedUser };
-	ctx.status = 201;
-});
-
-// Endpoint para actualizar un usuario
-router.put('/user/:id', async ctx => {
-	const id = ctx.params.id;
-	const { name, lastname, email, identification, password } = ctx.request.body;
-
-	const updatedUser = await UserRepository.updateUser({
-		id,
-		name,
-		lastname,
-		email,
-		identification,
-		password,
-	});
-
-	ctx.body = { ok: true, message: updatedUser };
-});
-
-// Endpoint para eliminar un usuario
-router.delete('/user/:id', async (ctx, next) => {
-	const id = ctx.params.id;
-	const deletedUser = await UserRepository.deleteUser(id);
-	
-	if (!deletedUser) {
-		ctx.status = 404;
-		ctx.body = { ok: false, message: 'Usuario no encontrado' };
-		return;
-	}
-
-	ctx.body = { ok: true, message: 'Usuario eliminado', deletedUser };
-})
-
-router.get('/vacilapi', ctx => {
-	ctx.body = '¡Hola mundo desde Koa-router GET!';
-	ctx.status = 200;
-});
-
-router.post('/vacilapi', ctx => {
-	ctx.body = '¡Hola mundo desde Koa-router POST!';
-	ctx.status = 200;
-});
-
-router.put('/vacilapi', ctx => {
-	ctx.body = '¡Hola mundo desde Koa-router PUT!';
-	ctx.status = 200;
-});
-
-router.delete('/vacilapi', ctx => {
-	ctx.body = '¡Hola mundo desde Koa-router DELETE!';
-	ctx.status = 200;
-});
 
 const server = app.listen(PORT, () => {
 	console.log(`Servidor activo en http://localhost:${PORT}`);

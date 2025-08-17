@@ -1,15 +1,16 @@
 import { UserRepository } from '../../database/UserRepository.js';
+import { hashPassword } from '../utils/hashPassword.js';
 
 // Endpoint para obtener todos los usuarios
-export const getAllUsers = async ctx => {
+async function getAllUsers(ctx) {
 	const users = await UserRepository.getUsers();
 	ctx.body = { ok: true, data: users };
 	ctx.status = 200;
-};
+}
 
 // Este endpoint es similar al anterior, sólo que devuelve
 // un usuaario especifico en lugar de uno solo
-export const getUserById = async ctx => {
+async function getUserById(ctx) {
 	const userId = ctx.params.id;
 	const user = await UserRepository.getUserById(userId);
 
@@ -21,27 +22,28 @@ export const getUserById = async ctx => {
 
 	ctx.body = { ok: true, data: user };
 	ctx.status = 200;
-};
+}
 
 // Endpoint para crear un usuario
-export const createUser = async ctx => {
+async function createUser(ctx) {
 	console.log('Datos del usuario:', ctx.request.body);
 	const { name, lastname, email, identification, password } = ctx.request.body;
 
-	const savedUser = await UserRepository.createUser(
+	const hashedPassword = await hashPassword(password);
+	const savedUser = await UserRepository.createUser({
 		name,
 		lastname,
 		email,
 		identification,
-		password
-	);
+		password: hashedPassword,
+	});
 
 	ctx.body = { ok: true, message: savedUser };
 	ctx.status = 201;
-};
+}
 
 // Endpoint para actualizar un usuario
-export const updateUser = async ctx => {
+async function updateUser(ctx) {
 	const id = ctx.params.id;
 	const { name, lastname, email, identification, password } = ctx.request.body;
 
@@ -55,10 +57,10 @@ export const updateUser = async ctx => {
 	});
 
 	ctx.body = { ok: true, message: updatedUser };
-};
+}
 
 // Endpoint para eliminar un usuario
-export const deleteUser = async ctx => {
+async function deleteUser(ctx) {
 	const id = ctx.params.id;
 	const deletedUser = await UserRepository.deleteUser(id);
 
@@ -69,7 +71,7 @@ export const deleteUser = async ctx => {
 	}
 
 	ctx.body = { ok: true, message: 'Usuario eliminado', deletedUser };
-};
+}
 
 export const userCtr = {
 	getAllUsers,

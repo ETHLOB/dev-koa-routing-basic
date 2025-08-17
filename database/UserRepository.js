@@ -6,13 +6,13 @@ async function getUsers() {
 }
 
 async function getUserById(id) {
-	const query = 'SEELCT * FROM users WHERE id = $1';
+	const query = 'SELECT * FROM users WHERE id = $1';
 	const params = [id];
 	const result = await executeQuery(query, params);
 	return result[0];
 }
 
-async function createUser(name, lastname, email, identification, password) {
+async function createUser({ name, lastname, email, identification, password }) {
 	const query = `
     INSERT INTO
     users (
